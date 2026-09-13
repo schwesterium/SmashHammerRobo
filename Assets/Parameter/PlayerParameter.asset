@@ -15,5 +15,5 @@ MonoBehaviour:
   WalkSpeed: 7
   DashSpeed: 2
   RotationSpeed: 1
-  JumpPower: 9
-  OverTimeAddPer: 0.3
+  JumpPower: 7
+  OverTimeAddPer: 0.2

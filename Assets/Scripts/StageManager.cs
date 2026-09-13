@@ -43,6 +43,9 @@ namespace HammerSmash
         [SerializeField]
         private CountDownUIManager _countDownUIManager;
 
+        [SerializeField]
+        private OverTimeUIManager _overTimeUIManager;
+
         /// <summary>
         /// プレイヤー管理クラスを参照する変数
         /// </summary>
@@ -132,8 +135,6 @@ namespace HammerSmash
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-
-            _localMultiplayManager.Init();
         }
 
         /// <summary>
@@ -141,9 +142,11 @@ namespace HammerSmash
         /// </summary>
         private void Start()
         {
+            _localMultiplayManager.Init();
             _cameraContoller = Camera.main.GetComponent<CameraContoller>();
 
             _resultUIManager.Init();
+            _overTimeUIManager.Init();
 
             _lobbyStartArea.OnEnter += col => LobbyEnter(col);
             _lobbyStartArea.OnExit += col => LobbyExit(col);
@@ -190,6 +193,8 @@ namespace HammerSmash
                     if (!_isOverTime && _timeElapsed >= 60f)
                     {
                         _isOverTime = true;
+                        _overTimeUIManager.SetActive(true);
+                        _overTimeUIManager.PlayAnimation();
                         OnOverTimeStart?.Invoke();
                         AudioManager.Instance.PlayBGM("OverTime");
 
@@ -271,8 +276,11 @@ namespace HammerSmash
         /// リトライ処理を行う関数
         /// </summary>
         private void Retry()
-        {          
+        {
             _alivePlayerCount = _localMultiplayManager.ActivePlayerCount;
+            _timeElapsed = 0f;
+            _time = 0f;
+            _stageUIManager.DisplayTime(_timeElapsed);
 
             StartCoroutine(RetryGame());
         }
@@ -291,9 +299,9 @@ namespace HammerSmash
             {
                 var pc = _playerControllers[i];
 
-               pc.gameObject.SetActive(true);
-               pc.OnRetry();
-               pc.SleepEnable(true);
+                pc.gameObject.SetActive(true);
+                pc.OnRetry();
+                pc.SleepEnable(true);
             }
 
             _animator.enabled = true;
@@ -401,7 +409,7 @@ namespace HammerSmash
             // 演出時間分待機
             yield return new WaitForSeconds(_gameAnimTime);
             // 操作説明のUIを隠す
-            _stageUIManager.TargetShowHide(_controlUI,false);
+            _stageUIManager.TargetShowHide(_controlUI, false);
 
             //コントローラの接続チェック終了
             _localMultiplayManager.EndReceiving();
@@ -520,7 +528,7 @@ namespace HammerSmash
                     break;
             }
             // カウントダウン処理を呼び出し
-            
+
         }
 
         private IEnumerator LobbyCountDown()

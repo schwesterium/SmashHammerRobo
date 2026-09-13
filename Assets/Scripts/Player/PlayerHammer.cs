@@ -180,6 +180,8 @@ namespace HammerSmash
             CurrentState = EvaluteChargeState();
         }
 
+        public void ResetChargeSpeed() => _chargeSpeedPer = 1f;
+
         //チャージ段階の判定
         private PowerChargeState EvaluteChargeState()
         {

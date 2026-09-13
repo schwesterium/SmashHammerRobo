@@ -64,8 +64,6 @@ namespace SchwesteriumLibrary.Input
 
             foreach (var device in devices)
             {
-                //Debug.Log(device.name);
-
                 //プレイヤー数の上限チェック
                 if (_activePlayers.Count >= _maxPlayers) { return; }
 
@@ -138,8 +136,6 @@ namespace SchwesteriumLibrary.Input
             //プレイヤーとデバイスの記録
             _activePlayers.Add(handler);
             _pairedDevices.Add(device);
-
-            //Debug.Log($"Player{++playerId} が参加しました{device.displayName}");
         }
 
         /// <summary>

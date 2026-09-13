@@ -69,6 +69,8 @@ namespace HammerSmash
         {
             if (_cubeCaster.IsCasted)
             {
+                Debug.Log(_playerParameter.JumpPower);
+                Debug.Log(Vector3.up * _playerParameter.JumpPower);
                 _rb.AddForce(Vector3.up * _playerParameter.JumpPower, ForceMode.Impulse);
                 return true;
             }
@@ -115,8 +117,8 @@ namespace HammerSmash
             isKnockBacking = false;
         }
 
-
         protected void SetOverTimeBaseSpeed()=> _speed += _playerParameter.WalkSpeed * _playerParameter.OverTimeAddPer;
+        protected void ResetWalkSpeed() => _speed = _playerParameter.WalkSpeed;
         protected void SetSpeedMultiply(float mul) => _speedMultiply = mul;
         protected void SetSpeedMultiply() => _speedMultiply = 1;
     }

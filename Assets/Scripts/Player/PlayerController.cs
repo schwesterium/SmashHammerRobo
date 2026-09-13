@@ -21,6 +21,8 @@ namespace HammerSmash
         [SerializeField]
         private PlayerHammer _hammer = null;
 
+        private bool _isWin = false;
+
         private enum State
         {
             Sleep,
@@ -144,14 +146,22 @@ namespace HammerSmash
         {
             OnGameStart();
 
+            ResetWalkSpeed();
+            SetSpeedMultiply();
+            _hammer.ResetChargeSpeed();
+
             _rb.isKinematic = false;
+            _rb.linearVelocity = Vector3.zero;
 
-            _inputHandler.OnMove += HandleMove;
-            _inputHandler.OnJump += HandleJump;
-            _inputHandler.OnAttack += ctx => HandleAttack(ctx);
+            if (!_isWin)
+            {
+                _inputHandler.OnMove += HandleMove;
+                _inputHandler.OnJump += HandleJump;
+                _inputHandler.OnAttack += ctx => HandleAttack(ctx);
 
-            _hammer.OnEndAttack += EndAttack;
-            _hammer.OnChangePowerChargeState += state => OnChangeHammerState(state);
+                _hammer.OnEndAttack += EndAttack;
+                _hammer.OnChangePowerChargeState += state => OnChangeHammerState(state);
+            }
         }
 
         //移動しているかどうかを判定する
@@ -247,7 +257,7 @@ namespace HammerSmash
         }
         private void HandleAttack(InputAction.CallbackContext ctx)
         {
-            if(_currentState == State.Sleep) { return; }
+            if (_currentState == State.Sleep) { return; }
 
             if (ctx.phase == InputActionPhase.Started)
             {
@@ -277,7 +287,7 @@ namespace HammerSmash
             _animator.SetBool(s_isWalkId, IsMoving(_moveInput));
             _animator.SetBool(s_endAttackId, true);
 
-            if(_currentState == State.Sleep) { return; }
+            if (_currentState == State.Sleep) { return; }
 
             _currentState = IsMoving(_moveInput) ? State.Walk : State.Idle;
         }
@@ -317,6 +327,7 @@ namespace HammerSmash
 
         public void ImWin()
         {
+            _isWin = true;
             _animator.SetBool(s_isWalkId, true);
         }
 
