@@ -274,34 +274,32 @@ namespace HammerSmash
         /// リトライ処理を行う関数
         /// </summary>
         private void Retry()
-        {
-            // アウトロ演出時の処理を呼び出し
-            //StartCoroutine(OutroAnimCoroutine("StageScene"));
-
-            _resultUIManager.ShowHide(false);
-
+        {          
             _alivePlayerCount = _localMultiplayManager.ActivePlayerCount;
 
             _animator.enabled = true;
-
-            for (int i = 0; i < _alivePlayerCount; ++i)
-            {
-                _playerControllers[i].gameObject.SetActive(true);
-                _playerControllers[i].OnGameStart();
-            }
-
-            AudioManager.Instance.PlayBGM("Main");
 
             StartCoroutine(RetryGame());
         }
 
         private IEnumerator RetryGame()
         {
+            //リザルトアウトロアニメーション
+            _resultUIManager.ResultAnimator.SetTrigger(ResultUIManager.ResultOutroTriggerID);
+            yield return new WaitForSeconds(_gameAnimTime);
+            _resultUIManager.ShowHide(false);
+
             _currentState = GameState.Intro;
 
-            foreach (PlayerController playerController in _playerControllers)
+            AudioManager.Instance.PlayBGM("Main");
+
+            for (int i = 0; i < _alivePlayerCount; ++i)
             {
-                playerController.SleepEnable(true);
+                var pc = _playerControllers[i];
+
+               pc.gameObject.SetActive(true);
+               pc.OnGameStart();
+               pc.SleepEnable(true);
             }
 
             //遷移アニメーション
