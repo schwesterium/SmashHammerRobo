@@ -116,6 +116,7 @@ namespace HammerSmash
         private enum GameState
         {
             Lobby,
+            Intro,
             Play,
 
         }
@@ -170,6 +171,8 @@ namespace HammerSmash
             switch (_currentState)
             {
                 case GameState.Lobby:
+                    break;
+                case GameState.Intro:
                     break;
                 case GameState.Play:
                     //もしタイマーが動くフラグオンでないならなにもしない by tosa
@@ -236,10 +239,6 @@ namespace HammerSmash
 
         public void StartGame()
         {
-            //コントローラの接続チェック終了
-            _localMultiplayManager.EndReceiving();
-            _localMultiplayManager.SetActiveUnassignedPlayer(false);
-
             var players = GameObject.FindGameObjectsWithTag("Player");
 
             foreach (var p in players)
@@ -277,7 +276,52 @@ namespace HammerSmash
         private void Retry()
         {
             // アウトロ演出時の処理を呼び出し
-            StartCoroutine(OutroAnimCoroutine("StageScene"));
+            //StartCoroutine(OutroAnimCoroutine("StageScene"));
+
+            _resultUIManager.ShowHide(false);
+
+            _alivePlayerCount = _localMultiplayManager.ActivePlayerCount;
+
+            _animator.enabled = true;
+
+            for (int i = 0; i < _alivePlayerCount; ++i)
+            {
+                _playerControllers[i].gameObject.SetActive(true);
+                _playerControllers[i].OnGameStart();
+            }
+
+            AudioManager.Instance.PlayBGM("Main");
+
+            StartCoroutine(RetryGame());
+        }
+
+        private IEnumerator RetryGame()
+        {
+            _currentState = GameState.Intro;
+
+            foreach (PlayerController playerController in _playerControllers)
+            {
+                playerController.SleepEnable(true);
+            }
+
+            //遷移アニメーション
+            _transitionUIManager.ShowHide(true);
+            _animator.SetTrigger(_outro1TriggerID);
+            yield return new WaitForSeconds(_gameAnimTime);
+            _transitionUIManager.ShowHide(false);
+
+            //カウントダウンアニメーション
+            _mainGameIntroUIManager.ShowHide(true);
+            CountDown(CountDownUIManager.MainGameCountTriggerID);
+            yield return new WaitForSeconds(_mainGameStartIntroTime);
+            _mainGameIntroUIManager.ShowHide(false);
+
+            foreach (PlayerController playerController in _playerControllers)
+            {
+                playerController.SleepEnable(false);
+            }
+
+            _currentState = GameState.Play;
         }
 
         /// <summary>
@@ -318,12 +362,7 @@ namespace HammerSmash
             // 演出時間分待機
             yield return new WaitForSeconds(_resultAnimTime);
 
-            // --- ボタンの判定をオン ---
-            _resultUIManager.RetryButton.enabled = true;
-            _resultUIManager.TitleButton.enabled = true;
-
-            // リトライボタンを選択
-            _resultUIManager.RetryButton.Select();
+            _resultUIManager.ButtonEnable(true);
         }
 
         /// <summary>
@@ -348,6 +387,8 @@ namespace HammerSmash
         /// <returns></returns>
         private IEnumerator MainGameIntroAnimCoroutine()
         {
+            _currentState = GameState.Intro;
+
             // プレイヤー操作管理クラスを全て参照
             foreach (PlayerController playerController in _playerControllers)
             {
@@ -363,6 +404,11 @@ namespace HammerSmash
             yield return new WaitForSeconds(_gameAnimTime);
             // 操作説明のUIを隠す
             _stageUIManager.TargetShowHide(_controlUI,false);
+
+            //コントローラの接続チェック終了
+            _localMultiplayManager.EndReceiving();
+            _localMultiplayManager.SetActiveUnassignedPlayer(false);
+
             // メインゲームの初期設定処理を行う
             StartGame();
             // メインゲームイントロUI表示
@@ -443,8 +489,6 @@ namespace HammerSmash
             foreach (var p in players)
             {
                 if (!p.activeSelf) { continue; }
-
-                Debug.Log(p.gameObject.name);
 
                 _cameraContoller.SetTarget(p.transform);
                 _cameraContoller.StartZoom();

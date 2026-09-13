@@ -57,5 +57,13 @@ namespace HammerSmash
                 child.gameObject.SetActive(isActive);
             }
         }
+
+        public void ButtonEnable(bool v)
+        {
+            RetryButton.enabled = v;
+            TitleButton.enabled = v;
+
+            if (v) { RetryButton.Select(); }
+        }
     }
 }

@@ -48,7 +48,6 @@ namespace SchwesteriumLibrary.Input
         {
             for (int i = 0; i < _maxPlayers - _activePlayers.Count; ++i)
             {
-                Debug.Log(i);
                 _playerPrefabs[_playerPrefabs.Length - i - 1].SetActive(v);
             }
         }

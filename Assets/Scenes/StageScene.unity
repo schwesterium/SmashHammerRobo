@@ -1047,7 +1047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2961459473304502463, guid: 58c8a2664ef8a88439ba98bea4fc23f6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6693357650283831146, guid: 58c8a2664ef8a88439ba98bea4fc23f6, type: 3}
       propertyPath: m_Pivot.x
@@ -2669,7 +2669,7 @@ MonoBehaviour:
   - {fileID: 1166439177}
   - {fileID: 1705920172}
   _maxPlayers: 4
-  _useKeyboard: 0
+  _useKeyboard: 1
   _initResister: 1
 --- !u!1001 &1988979200
 PrefabInstance:
