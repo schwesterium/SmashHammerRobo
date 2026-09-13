@@ -186,8 +186,8 @@ namespace HammerSmash
                         _isTimerRunning = false;
                     }
 
-                    //90sec経過したら延長戦 tosa
-                    if (!_isOverTime && _timeElapsed >= 90f)
+                    //60sec経過したら延長戦 tosa
+                    if (!_isOverTime && _timeElapsed >= 60f)
                     {
                         _isOverTime = true;
                         OnOverTimeStart?.Invoke();
