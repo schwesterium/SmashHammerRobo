@@ -23,11 +23,11 @@ MonoBehaviour:
     - _key: Hit4
       _value: {fileID: 8300000, guid: 11bf13ed5c638264dbd68ca2f59ddc9f, type: 3}
     - _key: ShakeHammer1
-      _value: {fileID: 8300000, guid: 367583c710bfbc04490bd42a0461ec67, type: 3}
-    - _key: ShakeHammer2
       _value: {fileID: 8300000, guid: 2675e3e31b2585b40bea97110b29d315, type: 3}
-    - _key: ShakeHammer3
+    - _key: ShakeHammer2
       _value: {fileID: 8300000, guid: 93371d6f1c985bb448878accb096c491, type: 3}
+    - _key: ShakeHammer3
+      _value: {fileID: 8300000, guid: 367583c710bfbc04490bd42a0461ec67, type: 3}
     - _key: ShakeHammer4
       _value: {fileID: 8300000, guid: e2514b9c53c1f52438f8fd10a1abc56c, type: 3}
     - _key: WaterHit

@@ -302,6 +302,10 @@ namespace HammerSmash
                     AudioManager.Instance.PlaySE("Hit4");
                     CameraShaker.CameraShake(0.1f, 1f);
                     break;
+                case PlayerHammer.PowerChargeState.Max:
+                    AudioManager.Instance.PlaySE("Hit4");
+                    CameraShaker.CameraShake(0.1f, 1f);
+                    break;
                 default:
                     break;
             }

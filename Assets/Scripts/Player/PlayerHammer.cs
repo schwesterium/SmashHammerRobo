@@ -12,7 +12,7 @@ namespace HammerSmash
         private const float POWER_MAX_RATIO_LOW = 0.25f;
         private const float POWER_MAX_RATIO_MEDIUM = 0.5f;
         private const float POWER_MAX_RATIO_HIHG = 0.75f;
-        private const float POWER_MAX_RATIO_EXHIHG = 1f;
+        private const float POWER_MAX_RATIO_EXHIHG = 0.99f;
 
         [SerializeField]
         private TriggerChecker _damageColTrigger = null;
@@ -46,7 +46,8 @@ namespace HammerSmash
             Low,
             Medium,
             High,
-            ExHigh
+            ExHigh,
+            Max
         }
 
         private PowerChargeState _currentState = PowerChargeState.Low;
@@ -120,6 +121,10 @@ namespace HammerSmash
                     _effects[2].gameObject.SetActive(false);
                     _effects[3].gameObject.SetActive(true);
                     break;
+                case PowerChargeState.Max:
+                    _effects[3].gameObject.SetActive(false);
+                    _effects[4].gameObject.SetActive(true);
+                    break;
                 default:
                     break;
             }
@@ -140,6 +145,9 @@ namespace HammerSmash
                     break;
                 case PowerChargeState.ExHigh:
                     _effects[3].gameObject.SetActive(v);
+                    break;
+                case PowerChargeState.Max:
+                    _effects[4].gameObject.SetActive(v);
                     break;
                 default:
                     break;
@@ -180,7 +188,8 @@ namespace HammerSmash
             if (POWER_MAX_RATIO_LOW >= ratio) { return PowerChargeState.Low; }
             else if (POWER_MAX_RATIO_MEDIUM >= ratio) { return PowerChargeState.Medium; }
             else if (POWER_MAX_RATIO_HIHG >= ratio) { return PowerChargeState.High; }
-            else { return PowerChargeState.ExHigh; }
+            else if (POWER_MAX_RATIO_EXHIHG >= ratio) { return PowerChargeState.ExHigh; }
+            else { return PowerChargeState.Max; }
         }
 
         
@@ -229,6 +238,7 @@ namespace HammerSmash
             _effects[1].gameObject.SetActive(false);
             _effects[2].gameObject.SetActive(false);
             _effects[3].gameObject.SetActive(false);
+            _effects[4].gameObject.SetActive(false);
 
             PowerReset();
 
@@ -249,6 +259,9 @@ namespace HammerSmash
                     AudioManager.Instance.PlaySE("ShakeHammer3");
                     break;
                 case PowerChargeState.ExHigh:
+                    AudioManager.Instance.PlaySE("ShakeHammer4");
+                    break;
+                case PowerChargeState.Max:
                     AudioManager.Instance.PlaySE("ShakeHammer4");
                     break;
                 default:
