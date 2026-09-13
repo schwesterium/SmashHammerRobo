@@ -93,7 +93,7 @@ namespace HammerSmash
         private IEnumerator StartGameAnimCoroutine()
         {
             // 演出用UI表示
-            _transitionUI_Manager.ShowHide(true);
+            _transitionUI_Manager.SetActive(true);
             // 演出トリガーを起動
             _animator.SetTrigger(_startGameTriggerID);
             // 演出時間分待機
@@ -109,7 +109,7 @@ namespace HammerSmash
         private IEnumerator ExitGameAnimCoroutine()
         {
             // 演出用UI表示
-            _transitionUI_Manager.ShowHide(true);
+            _transitionUI_Manager.SetActive(true);
             // 演出トリガーを起動
             _animator.SetTrigger(_exitGameTriggerID);
             // 演出時間分待機
@@ -127,11 +127,11 @@ namespace HammerSmash
         private IEnumerator TitleIntroAnimCoroutine()
         {
             // 演出用UI表示
-            _transitionUI_Manager.ShowHide(true);
+            _transitionUI_Manager.SetActive(true);
             // 演出時間分待機
             yield return new WaitForSeconds(_gameAnimTime);
             // 演出用UI非表示
-            _transitionUI_Manager.ShowHide(false);
+            _transitionUI_Manager.SetActive(false);
 
             // --- ボタンの判定をオン ---
             _titleUI_Manager.StartButton.enabled = true;

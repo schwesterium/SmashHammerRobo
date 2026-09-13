@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91be082aca32716498c2ee23d4bbd9f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HammerSmash.GameIntroUIManager
-  CountDownAnimator: {fileID: 7135776270741726805}
+  _animator: {fileID: 7135776270741726805}
 --- !u!95 &7135776270741726805
 Animator:
   serializedVersion: 7

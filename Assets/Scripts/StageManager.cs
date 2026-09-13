@@ -64,6 +64,7 @@ namespace HammerSmash
         /// 第一アウトロ演出トリガーを参照する変数
         /// </summary>
         private static readonly int _outro1TriggerID = Animator.StringToHash("OnOutro1");
+        private static readonly int _retryTriggerID = Animator.StringToHash("OnRetry");
 
         /// <summary>
         /// ゲームの演出時間を参照する変数
@@ -273,8 +274,6 @@ namespace HammerSmash
         {          
             _alivePlayerCount = _localMultiplayManager.ActivePlayerCount;
 
-            _animator.enabled = true;
-
             StartCoroutine(RetryGame());
         }
 
@@ -283,7 +282,6 @@ namespace HammerSmash
             //リザルトアウトロアニメーション
             _resultUIManager.PlayOutro();
             yield return new WaitForSeconds(_gameAnimTime);
-            _resultUIManager.SetActive(false);
 
             _currentState = GameState.Intro;
 
@@ -294,21 +292,27 @@ namespace HammerSmash
                 var pc = _playerControllers[i];
 
                pc.gameObject.SetActive(true);
-               pc.OnGameStart();
+               pc.OnRetry();
                pc.SleepEnable(true);
             }
 
+            _animator.enabled = true;
+
             //遷移アニメーション
-            _transitionUIManager.ShowHide(true);
-            _animator.SetTrigger(_outro1TriggerID);
-            yield return new WaitForSeconds(_gameAnimTime);
-            _transitionUIManager.ShowHide(false);
+            _transitionUIManager.SetActive(true);
+            //StageSceneのTransitionUIと入れ替える
+            _resultUIManager.SetActive(false);
+            _resultUIManager.TransitionUI.SetActive(false);
+
+            _animator.SetTrigger(_retryTriggerID);
 
             //カウントダウンアニメーション
             _mainGameIntroUIManager.ShowHide(true);
             CountDown(_currentState);
             yield return new WaitForSeconds(_mainGameStartIntroTime);
             _mainGameIntroUIManager.ShowHide(false);
+
+            _transitionUIManager.SetActive(false);
 
             foreach (PlayerController playerController in _playerControllers)
             {
@@ -391,7 +395,7 @@ namespace HammerSmash
             }
 
             // 演出用UI表示
-            _transitionUIManager.ShowHide(true);
+            _transitionUIManager.SetActive(true);
             // 演出トリガーを起動
             _animator.SetTrigger(_outro1TriggerID);
             // 演出時間分待機
@@ -414,7 +418,7 @@ namespace HammerSmash
             // メインゲームイントロUI非表示
             _mainGameIntroUIManager.ShowHide(false);
             // 演出用UI非表示
-            _transitionUIManager.ShowHide(false);
+            _transitionUIManager.SetActive(false);
 
             // プレイヤー操作管理クラスを全て参照
             foreach (PlayerController playerController in _playerControllers)
@@ -434,11 +438,11 @@ namespace HammerSmash
         private IEnumerator StageIntroAnimCoroutine()
         {
             // 演出用UI表示
-            _transitionUIManager.ShowHide(true);
+            _transitionUIManager.SetActive(true);
             // 演出時間分待機
             yield return new WaitForSeconds(_gameAnimTime);
             // 演出用UI非表示
-            _transitionUIManager.ShowHide(false);
+            _transitionUIManager.SetActive(false);
         }
 
         /// <summary>

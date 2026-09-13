@@ -23,6 +23,11 @@ namespace HammerSmash
         [SerializeField]
         private Animator _resultAnimator = null;
 
+        [SerializeField]
+        private TransitionUIManager _transitionUI = null;
+
+        public TransitionUIManager TransitionUI { get => _transitionUI; }
+
         private static readonly int s_introId = Animator.StringToHash("OnResultIntro");
         private static readonly int s_outroId = Animator.StringToHash("OnResultOutro");
 
@@ -37,6 +42,7 @@ namespace HammerSmash
 
             // 最初はUIを非表示
             SetActive(false);
+            _transitionUI.SetActive(false);
         }
 
         private void OnDestroy()
@@ -63,7 +69,11 @@ namespace HammerSmash
         }
 
         public void PlayIntro() => _resultAnimator.SetTrigger(s_introId);
-        public void PlayOutro() => _resultAnimator.SetTrigger(s_outroId);
+        public void PlayOutro()
+        {
+            _transitionUI.SetActive(true);
+            _resultAnimator.SetTrigger(s_outroId);
+        }
 
         public void ButtonEnable(bool v)
         {

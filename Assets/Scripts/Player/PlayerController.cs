@@ -140,6 +140,20 @@ namespace HammerSmash
             _rb.position = startPosition;
         }
 
+        public void OnRetry()
+        {
+            OnGameStart();
+
+            _rb.isKinematic = false;
+
+            _inputHandler.OnMove += HandleMove;
+            _inputHandler.OnJump += HandleJump;
+            _inputHandler.OnAttack += ctx => HandleAttack(ctx);
+
+            _hammer.OnEndAttack += EndAttack;
+            _hammer.OnChangePowerChargeState += state => OnChangeHammerState(state);
+        }
+
         //移動しているかどうかを判定する
         private bool IsMoving(Vector2 vector2)
         {

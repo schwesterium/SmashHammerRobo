@@ -55,6 +55,7 @@ MonoBehaviour:
   _retryButton: {fileID: 8934985979951895512}
   _titleButton: {fileID: 6127751558753438738}
   _resultAnimator: {fileID: 8530507323929727552}
+  _transitionUI: {fileID: 6067719888737534458}
 --- !u!95 &8530507323929727552
 Animator:
   serializedVersion: 7

@@ -164,7 +164,7 @@ MonoBehaviour:
   _launchDuration: 0.3
   startPosition: {x: 0, y: 0, z: 0}
   _hammer: {fileID: 3204921828355370172}
-  _stunTime: 1
+  _stunTime: 0.75
   _animator: {fileID: 301455273883711528}
 --- !u!136 &2607428016775441424
 CapsuleCollider:
