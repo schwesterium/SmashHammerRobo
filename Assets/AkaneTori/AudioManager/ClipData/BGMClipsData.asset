@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09dd80d78cf6a3c4d93608515ae0fbad, type: 3}
+  m_Name: BGMClipsData
+  m_EditorClassIdentifier: Assembly-CSharp::AkaneTools.AudioClipsData
+  ClipsDict:
+    _keyValueList:
+    - _key: Title
+      _value: {fileID: 8300000, guid: fbce9bc43afbaee4d9e0ae8265076608, type: 3}
+    - _key: Main
+      _value: {fileID: 8300000, guid: 14a0f221adb2e634c8b38d64ef83a0b5, type: 3}
+    - _key: Finish
+      _value: {fileID: 8300000, guid: b2cebd8cd1a475e46a7a05f92a72711a, type: 3}
+    - _key: OverTime
+      _value: {fileID: 8300000, guid: adfe23f441bee4841b4d5c5532758b2d, type: 3}
+    - _key: Lobby
+      _value: {fileID: 8300000, guid: 7f04aacff474da342a0bb648cab854bd, type: 3}
+    - _key: Result
+      _value: {fileID: 8300000, guid: 858416172e49fe743ad7b31f8d35ebd6, type: 3}

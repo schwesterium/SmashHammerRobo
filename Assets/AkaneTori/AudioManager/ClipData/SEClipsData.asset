@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09dd80d78cf6a3c4d93608515ae0fbad, type: 3}
+  m_Name: SEClipsData
+  m_EditorClassIdentifier: Assembly-CSharp::AkaneTools.AudioClipsData
+  ClipsDict:
+    _keyValueList:
+    - _key: Hit1
+      _value: {fileID: 8300000, guid: 5263392aceed20442a7457f209abb2b9, type: 3}
+    - _key: Hit2
+      _value: {fileID: 8300000, guid: 55c002a6542992c48b434138b8189cae, type: 3}
+    - _key: Hit3
+      _value: {fileID: 8300000, guid: 5a23ab7747dd00a42b7f15584adacfd4, type: 3}
+    - _key: Hit4
+      _value: {fileID: 8300000, guid: 11bf13ed5c638264dbd68ca2f59ddc9f, type: 3}
+    - _key: ShakeHammer1
+      _value: {fileID: 8300000, guid: 367583c710bfbc04490bd42a0461ec67, type: 3}
+    - _key: ShakeHammer2
+      _value: {fileID: 8300000, guid: 2675e3e31b2585b40bea97110b29d315, type: 3}
+    - _key: ShakeHammer3
+      _value: {fileID: 8300000, guid: 93371d6f1c985bb448878accb096c491, type: 3}
+    - _key: ShakeHammer4
+      _value: {fileID: 8300000, guid: e2514b9c53c1f52438f8fd10a1abc56c, type: 3}
+    - _key: WaterHit
+      _value: {fileID: 8300000, guid: 85f829b05397a494c8cdb20d9fc851cc, type: 3}
+    - _key: Finish
+      _value: {fileID: 8300000, guid: b2cebd8cd1a475e46a7a05f92a72711a, type: 3}
