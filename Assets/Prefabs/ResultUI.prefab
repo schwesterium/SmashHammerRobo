@@ -52,9 +52,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84ade635ed3e0f6498ccf166a2df6dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HammerSmash.ResultUIManager
-  RetryButton: {fileID: 8934985979951895512}
-  TitleButton: {fileID: 6127751558753438738}
-  ResultAnimator: {fileID: 8530507323929727552}
+  _retryButton: {fileID: 8934985979951895512}
+  _titleButton: {fileID: 6127751558753438738}
+  _resultAnimator: {fileID: 8530507323929727552}
 --- !u!95 &8530507323929727552
 Animator:
   serializedVersion: 7

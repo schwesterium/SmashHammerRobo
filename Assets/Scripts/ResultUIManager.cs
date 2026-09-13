@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace HammerSmash
@@ -8,47 +9,50 @@ namespace HammerSmash
     /// </summary>
     public class ResultUIManager : MonoBehaviour
     {
-        /// <summary>
-        /// リトライボタンを参照する変数
-        /// </summary>
-        public Button RetryButton;
+        [SerializeField]
+        private Button _retryButton = null;
         /// <summary>
         /// タイトルボタンを参照する変数
         /// </summary>
-        public Button TitleButton;
+        [SerializeField]
+        private Button _titleButton = null;
 
-        /// <summary>
-        /// アニメーターを参照する変数
-        /// </summary>
-        public Animator ResultAnimator;
+        public event Action OnClickRetryButton;
+        public event Action OnClickTitleButton;
 
-        /// <summary>
-        /// リザルトイントロ演出トリガーを参照する変数
-        /// </summary>
-        public static readonly int ResultIntroTriggerID = Animator.StringToHash("OnResultIntro");
-        /// <summary>
-        /// リザルトアウトロ演出トリガーを参照する変数
-        /// </summary>
-        public static readonly int ResultOutroTriggerID = Animator.StringToHash("OnResultOutro");
+        [SerializeField]
+        private Animator _resultAnimator = null;
 
-        /// <summary>
-        /// 初期設定を行う関数
-        /// </summary>
-        private void Start()
+        private static readonly int s_introId = Animator.StringToHash("OnResultIntro");
+        private static readonly int s_outroId = Animator.StringToHash("OnResultOutro");
+
+        public void Init()
         {
+            _retryButton.onClick.AddListener(() => OnClickRetryButton?.Invoke());
+            _titleButton.onClick.AddListener(() => OnClickTitleButton?.Invoke());
+
             // --- 最初はボタンの判定をオフ ---
-            RetryButton.enabled = false;
-            TitleButton.enabled = false;
+            _retryButton.enabled = false;
+            _titleButton.enabled = false;
 
             // 最初はUIを非表示
-            ShowHide(false);
+            SetActive(false);
+        }
+
+        private void OnDestroy()
+        {
+            _retryButton.onClick.RemoveAllListeners();
+            _titleButton.onClick.RemoveAllListeners();
+
+            OnClickRetryButton = null;
+            OnClickTitleButton = null;
         }
 
         /// <summary>
         /// UIを表示・非表示にする関数
         /// </summary>
         /// <param name="isActive"></param>
-        public void ShowHide(bool isActive)
+        public void SetActive(bool isActive)
         {
             // 子オブジェクトを全てチェック
             foreach (Transform child in transform)
@@ -58,12 +62,15 @@ namespace HammerSmash
             }
         }
 
+        public void PlayIntro() => _resultAnimator.SetTrigger(s_introId);
+        public void PlayOutro() => _resultAnimator.SetTrigger(s_outroId);
+
         public void ButtonEnable(bool v)
         {
-            RetryButton.enabled = v;
-            TitleButton.enabled = v;
+            _retryButton.enabled = v;
+            _titleButton.enabled = v;
 
-            if (v) { RetryButton.Select(); }
+            if (v) { _retryButton.Select(); }
         }
     }
 }

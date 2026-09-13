@@ -7,19 +7,11 @@ namespace HammerSmash
     /// </summary>
     public class CountDownUIManager : MonoBehaviour
     {
-        /// <summary>
-        /// アニメーターを参照する変数
-        /// </summary>
-        public Animator CountDownAnimator;
+        [SerializeField]
+        private Animator _animator = null;
 
-        /// <summary>
-        /// ロビーカウントダウン演出トリガーを参照する変数
-        /// </summary>
-        public static readonly int LobbyCountTriggerID = Animator.StringToHash("OnLobbyCount");
-        /// <summary>
-        /// メインゲームカウントダウン演出トリガーを参照する変数
-        /// </summary>
-        public static readonly int MainGameCountTriggerID = Animator.StringToHash("OnMainGameCount");
+        private static readonly int s_lobbyCountId = Animator.StringToHash("OnLobbyCount");
+        private static readonly int s_mainGameCountId = Animator.StringToHash("OnMainGameCount");
 
         /// <summary>
         /// 初期設定を行う関数
@@ -27,14 +19,17 @@ namespace HammerSmash
         private void Start()
         {
             // 最初はUIを非表示
-            ShowHide(false);
+            SetActive(false);
         }
+
+        public void PlayCountLobby() => _animator.SetTrigger(s_lobbyCountId);
+        public void PlayCountMainGame() => _animator.SetTrigger(s_mainGameCountId);
 
         /// <summary>
         /// UIを表示・非表示にする関数
         /// </summary>
         /// <param name="isActive"></param>
-        public void ShowHide(bool isActive)
+        public void SetActive(bool isActive)
         {
             // 子オブジェクトを全てチェック
             foreach (Transform child in transform)

@@ -130,14 +130,8 @@ namespace HammerSmash
         /// </summary>
         private void Awake()
         {
-            // --- コンポーネントの登録 ---
             _animator = GetComponent<Animator>();
 
-            // --- 各ボタンに関数を登録 ---
-            _resultUIManager.RetryButton.onClick.AddListener(Retry);
-            _resultUIManager.TitleButton.onClick.AddListener(Title);
-
-            // デバイス管理の初期設定を行う
             _localMultiplayManager.Init();
         }
 
@@ -148,11 +142,13 @@ namespace HammerSmash
         {
             _cameraContoller = Camera.main.GetComponent<CameraContoller>();
 
-            // 現在あるデバイスを設定
-            //_localMultiplayManager.RegisterAllDevices();
+            _resultUIManager.Init();
 
             _lobbyStartArea.OnEnter += col => LobbyEnter(col);
             _lobbyStartArea.OnExit += col => LobbyExit(col);
+
+            _resultUIManager.OnClickRetryButton += Retry;
+            _resultUIManager.OnClickTitleButton += Title;
 
             //コントローラの接続チェック開始
             _localMultiplayManager.StartReceiving();
@@ -228,7 +224,7 @@ namespace HammerSmash
             if (_currentLobbyPlayerCount == _localMultiplayManager.ActivePlayerCount)
             {
                 // カウントダウン処理開始（中山が追加）
-                CountDown(CountDownUIManager.LobbyCountTriggerID);
+                CountDown(_currentState);
             }
         }
 
@@ -285,9 +281,9 @@ namespace HammerSmash
         private IEnumerator RetryGame()
         {
             //リザルトアウトロアニメーション
-            _resultUIManager.ResultAnimator.SetTrigger(ResultUIManager.ResultOutroTriggerID);
+            _resultUIManager.PlayOutro();
             yield return new WaitForSeconds(_gameAnimTime);
-            _resultUIManager.ShowHide(false);
+            _resultUIManager.SetActive(false);
 
             _currentState = GameState.Intro;
 
@@ -310,7 +306,7 @@ namespace HammerSmash
 
             //カウントダウンアニメーション
             _mainGameIntroUIManager.ShowHide(true);
-            CountDown(CountDownUIManager.MainGameCountTriggerID);
+            CountDown(_currentState);
             yield return new WaitForSeconds(_mainGameStartIntroTime);
             _mainGameIntroUIManager.ShowHide(false);
 
@@ -354,9 +350,9 @@ namespace HammerSmash
             }
 
             // リザルトUI表示
-            _resultUIManager.ShowHide(true);
+            _resultUIManager.SetActive(true);
             // 演出トリガーを起動
-            _resultUIManager.ResultAnimator.SetTrigger(ResultUIManager.ResultIntroTriggerID);
+            _resultUIManager.PlayIntro();
             // 演出時間分待機
             yield return new WaitForSeconds(_resultAnimTime);
 
@@ -370,9 +366,9 @@ namespace HammerSmash
         private IEnumerator OutroAnimCoroutine(string sceneName)
         {
             // 演出用UI表示
-            _resultUIManager.ShowHide(true);
+            _resultUIManager.SetActive(true);
             // 演出トリガーを起動
-            _resultUIManager.ResultAnimator.SetTrigger(ResultUIManager.ResultOutroTriggerID);
+            _resultUIManager.PlayOutro();
             // 演出時間分待機
             yield return new WaitForSeconds(_gameAnimTime);
             // 指定のシーンに遷移
@@ -412,7 +408,7 @@ namespace HammerSmash
             // メインゲームイントロUI表示
             _mainGameIntroUIManager.ShowHide(true);
             // カウントダウンを開始
-            CountDown(CountDownUIManager.MainGameCountTriggerID);
+            CountDown(_currentState);
             // 演出時間分待機
             yield return new WaitForSeconds(_mainGameStartIntroTime);
             // メインゲームイントロUI非表示
@@ -505,49 +501,52 @@ namespace HammerSmash
         /// <summary>
         /// カウントダウンを行う関数
         /// </summary>
-        /// <param name="animNumber"></param>
-        private void CountDown(int animNumber)
+        private void CountDown(GameState state)
         {
+            switch (state)
+            {
+                case GameState.Lobby:
+                    StartCoroutine(LobbyCountDown());
+                    break;
+                case GameState.Intro:
+                    StartCoroutine(MainGameCountDown());
+                    break;
+                default:
+                    Debug.LogWarning("無効なState");
+                    break;
+            }
             // カウントダウン処理を呼び出し
-            StartCoroutine(CountDownCoroutine(animNumber));
+            
         }
 
-        /// <summary>
-        /// カウントダウンの演出および処理を行うコルーチン
-        /// </summary>
-        /// <param name="animNumber"></param>
-        /// <returns></returns>
-        private IEnumerator CountDownCoroutine(int animNumber)
+        private IEnumerator LobbyCountDown()
         {
-            // もし指定のアニメーションIDがメインゲーム用なら
-            if (animNumber == CountDownUIManager.LobbyCountTriggerID)
-            {
-                // ロビーのゲーム開始ポイントを削除
-                _lobbyStartArea.gameObject.SetActive(false);
+            // ロビーのゲーム開始ポイントを削除
+            _lobbyStartArea.gameObject.SetActive(false);
 
-                // カウントダウンUIを表示
-                _countDownUIManager.ShowHide(true);
-                // 演出を再生
-                _countDownUIManager.CountDownAnimator.SetTrigger(CountDownUIManager.LobbyCountTriggerID);
-                // 演出時間分待機
-                yield return new WaitForSeconds(_lobbyCountAnimTime);
-                // カウントダウンUIを非表示
-                _countDownUIManager.ShowHide(false);
+            // カウントダウンUIを表示
+            _countDownUIManager.SetActive(true);
+            // 演出を再生
+            _countDownUIManager.PlayCountLobby();
+            // 演出時間分待機
+            yield return new WaitForSeconds(_lobbyCountAnimTime);
+            // カウントダウンUIを非表示
+            _countDownUIManager.SetActive(false);
 
-                // メインゲームイントロ開始（中山が編集）
-                GameStartIntro();
-            }
-            else
-            {
-                // カウントダウンUIを表示
-                _countDownUIManager.ShowHide(true);
-                // 演出を再生
-                _countDownUIManager.CountDownAnimator.SetTrigger(CountDownUIManager.MainGameCountTriggerID);
-                // 演出時間分待機
-                yield return new WaitForSeconds(_mainGameStartIntroTime);
-                // カウントダウンUIを非表示
-                _countDownUIManager.ShowHide(false);
-            }
+            // メインゲームイントロ開始（中山が編集）
+            GameStartIntro();
+        }
+
+        private IEnumerator MainGameCountDown()
+        {
+            // カウントダウンUIを表示
+            _countDownUIManager.SetActive(true);
+            // 演出を再生
+            _countDownUIManager.PlayCountMainGame();
+            // 演出時間分待機
+            yield return new WaitForSeconds(_mainGameStartIntroTime);
+            // カウントダウンUIを非表示
+            _countDownUIManager.SetActive(false);
         }
     }
 }
